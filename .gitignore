@@ -1,0 +1,33 @@
+# Ignore compiled files
+*.class
+*.jar
+*.war
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.iml
+
+# Ignore dependency directories
+node_modules/
+target/
+bin/
+
+# Ignore environment files
+.env
+*.log
+
+#Ignore maven files
+.mvn/
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+.springBeans.xml
+.springBeans.xml.bak
+
+#ignore jar files
+api-gateway/target/
+service-registry/target/
+config-server/target/
