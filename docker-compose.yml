@@ -1,0 +1,441 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Databases for each microservice
+  postgres-auth:
+    image: postgres:15-alpine
+    container_name: postgres-auth
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-user:
+    image: postgres:15-alpine
+    container_name: postgres-user
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_user_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-clinic:
+    image: postgres:15-alpine
+    container_name: postgres-clinic
+    environment:
+      POSTGRES_DB: clinic_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_clinic_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-package:
+    image: postgres:15-alpine
+    container_name: postgres-package
+    environment:
+      POSTGRES_DB: package_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_package_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-reservation:
+    image: postgres:15-alpine
+    container_name: postgres-reservation
+    environment:
+      POSTGRES_DB: reservation_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_reservation_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-schedule:
+    image: postgres:15-alpine
+    container_name: postgres-schedule
+    environment:
+      POSTGRES_DB: schedule_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_schedule_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-payment:
+    image: postgres:15-alpine
+    container_name: postgres-payment
+    environment:
+      POSTGRES_DB: payment_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5438:5432"
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-promo:
+    image: postgres:15-alpine
+    container_name: postgres-promo
+    environment:
+      POSTGRES_DB: promo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5439:5432"
+    volumes:
+      - postgres_promo_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-staff:
+    image: postgres:15-alpine
+    container_name: postgres-staff
+    environment:
+      POSTGRES_DB: staff_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5440:5432"
+    volumes:
+      - postgres_staff_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-reporting:
+    image: postgres:15-alpine
+    container_name: postgres-reporting
+    environment:
+      POSTGRES_DB: reporting_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5441:5432"
+    volumes:
+      - postgres_reporting_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-inventory:
+    image: postgres:15-alpine
+    container_name: postgres-inventory
+    environment:
+      POSTGRES_DB: inventory_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5442:5432"
+    volumes:
+      - postgres_inventory_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-medicalhistory:
+    image: postgres:15-alpine
+    container_name: postgres-medicalhistory
+    environment:
+      POSTGRES_DB: medicalhistory_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5443:5432"
+    volumes:
+      - postgres_medicalhistory_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-feedback:
+    image: postgres:15-alpine
+    container_name: postgres-feedback
+    environment:
+      POSTGRES_DB: feedback_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5444:5432"
+    volumes:
+      - postgres_feedback_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-wallet:
+    image: postgres:15-alpine
+    container_name: postgres-wallet
+    environment:
+      POSTGRES_DB: wallet_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5445:5432"
+    volumes:
+      - postgres_wallet_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-referral:
+    image: postgres:15-alpine
+    container_name: postgres-referral
+    environment:
+      POSTGRES_DB: referral_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5446:5432"
+    volumes:
+      - postgres_referral_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-audit:
+    image: postgres:15-alpine
+    container_name: postgres-audit
+    environment:
+      POSTGRES_DB: audit_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5447:5432"
+    volumes:
+      - postgres_audit_data:/var/lib/postgresql/data
+    networks:
+      - clinic-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  # Redis for caching and distributed locks
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - clinic-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Kafka for event-driven communication
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc localhost 2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # RabbitMQ for notifications
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Kafka UI for monitoring
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - clinic-network
+
+  # Redis Commander for Redis monitoring
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    networks:
+      - clinic-network
+
+  # Adminer for database management
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - "8082:8080"
+    networks:
+      - clinic-network
+    depends_on:
+      - postgres-auth
+
+volumes:
+  # PostgreSQL volumes
+  postgres_auth_data:
+  postgres_user_data:
+  postgres_clinic_data:
+  postgres_package_data:
+  postgres_reservation_data:
+  postgres_schedule_data:
+  postgres_payment_data:
+  postgres_promo_data:
+  postgres_staff_data:
+  postgres_reporting_data:
+  postgres_inventory_data:
+  postgres_medicalhistory_data:
+  postgres_feedback_data:
+  postgres_wallet_data:
+  postgres_referral_data:
+  postgres_audit_data:
+  
+  # Redis volume
+  redis_data:
+  
+  # Kafka volumes
+  zookeeper_data:
+  zookeeper_logs:
+  kafka_data:
+  
+  # RabbitMQ volume
+  rabbitmq_data:
+
+networks:
+  clinic-network:
+    driver: bridge 
