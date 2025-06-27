@@ -27,8 +27,8 @@ echo [REQUEST BODY]
 echo {
 echo   "firstName": "John",
 echo   "lastName": "Doe", 
-echo   "email": "john.doae@example.com",
-echo   "password": "1Kk12312223#",
+echo   "email": "john.doe@example.com",
+echo   "password": "Test123!@#",
 echo   "phoneNumber": "+1234567890",
 echo   "role": "PATIENT"
 echo }
@@ -36,9 +36,10 @@ echo.
 echo [RESPONSE]
 curl -s -X POST "%BASE_URL%/register" ^
   -H "Content-Type: application/json" ^
-  -d "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"email\": \"john.doe@example.com\", \"password\": \"1Kk12312223#\", \"phoneNumber\": \"+1234567890\", \"role\": \"PATIENT\"}" 
+  -d "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"email\": \"john.doe@example.com\", \"password\": \"Test123!@#\", \"phoneNumber\": \"+1234567890\", \"role\": \"PATIENT\"}" 
 echo.
 echo.
+pause
 
 echo ========================================
 echo 3. Testing User Login
@@ -53,10 +54,10 @@ echo.
 echo [RESPONSE]
 curl -s -X POST "%BASE_URL%/login" ^
   -H "Content-Type: application/json" ^
-  -d "{\"email\": \"john.doae@example.com\", \"password\": \"Test123!@#\"}" 
+  -d "{\"email\": \"john.doe@example.com\", \"password\": \"Test123!@#\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 4. Testing Invalid Login (Wrong Password)
 echo ========================================
@@ -73,7 +74,7 @@ curl -s -X POST "%BASE_URL%/login" ^
   -d "{\"email\": \"john.doe@example.com\", \"password\": \"WrongPassword123!@#\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 5. Testing Duplicate Registration
 echo ========================================
@@ -94,7 +95,7 @@ curl -s -X POST "%BASE_URL%/register" ^
   -d "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"email\": \"john.doe@example.com\", \"password\": \"Test123!@#\", \"phoneNumber\": \"+1234567890\", \"role\": \"PATIENT\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 6. Testing Admin Registration
 echo ========================================
@@ -115,7 +116,7 @@ curl -s -X POST "%BASE_URL%/register" ^
   -d "{\"firstName\": \"Admin\", \"lastName\": \"User\", \"email\": \"admin@clinicsys.com\", \"password\": \"Admin123!@#\", \"phoneNumber\": \"+1987654321\", \"role\": \"ADMIN\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 7. Testing Staff Registration
 echo ========================================
@@ -133,10 +134,10 @@ echo.
 echo [RESPONSE]
 curl -s -X POST "%BASE_URL%/register" ^
   -H "Content-Type: application/json" ^
-  -d "{\"firstName\": \"Staff\", \"lastName\": \"Member\", \"email\": \"staff@clinicsys.com\", \"password\": \"123\", \"phoneNumber\": \"+1555555555\", \"role\": \"STAFF\"}" 
+  -d "{\"firstName\": \"Staff\", \"lastName\": \"Member\", \"email\": \"staff@clinicsys.com\", \"password\": \"Staff123!@#\", \"phoneNumber\": \"+1555555555\", \"role\": \"STAFF\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 8. Testing Invalid Email Format
 echo ========================================
@@ -156,7 +157,7 @@ curl -s -X POST "%BASE_URL%/register" ^
   -d "{\"firstName\": \"Test\", \"lastName\": \"User\", \"email\": \"invalid-email\", \"password\": \"Test123!@#\", \"role\": \"PATIENT\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 9. Testing Weak Password
 echo ========================================
@@ -176,7 +177,7 @@ curl -s -X POST "%BASE_URL%/register" ^
   -d "{\"firstName\": \"Test\", \"lastName\": \"User\", \"email\": \"test@example.com\", \"password\": \"weak\", \"role\": \"PATIENT\"}" 
 echo.
 echo.
-
+pause
 echo ========================================
 echo 10. Testing Missing Required Fields
 echo ========================================
@@ -194,7 +195,7 @@ curl -s -X POST "%BASE_URL%/register" ^
   -d "{\"firstName\": \"Test\", \"lastName\": \"User\", \"email\": \"test@example.com\"}" 
 echo.
 echo.
-
+pause 
 echo ========================================
 echo Test Summary
 echo ========================================
