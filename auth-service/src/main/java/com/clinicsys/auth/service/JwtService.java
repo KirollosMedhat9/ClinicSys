@@ -37,7 +37,17 @@ public class JwtService {
     }
     
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> claims = new HashMap<>();
+        // Add role claim if user has authorities
+        if (userDetails.getAuthorities() != null && !userDetails.getAuthorities().isEmpty()) {
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            if (role.startsWith("ROLE_")) {
+                claims.put("role", role.substring(5)); // Remove ROLE_ prefix
+            } else {
+                claims.put("role", role);
+            }
+        }
+        return generateToken(claims, userDetails);
     }
     
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -45,7 +55,17 @@ public class JwtService {
     }
     
     public String generateRefreshToken(UserDetails userDetails) {
-        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+        Map<String, Object> claims = new HashMap<>();
+        // Add role claim if user has authorities
+        if (userDetails.getAuthorities() != null && !userDetails.getAuthorities().isEmpty()) {
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            if (role.startsWith("ROLE_")) {
+                claims.put("role", role.substring(5)); // Remove ROLE_ prefix
+            } else {
+                claims.put("role", role);
+            }
+        }
+        return buildToken(claims, userDetails, refreshExpiration);
     }
     
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {

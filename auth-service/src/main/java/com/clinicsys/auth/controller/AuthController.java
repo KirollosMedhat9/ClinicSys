@@ -13,6 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.Map;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,9 +30,26 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
-        AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
+        AuthResponse authResponse = authService.login(request);
+
+        // Set JWT as HttpOnly cookie
+        Cookie jwtCookie = new Cookie("jwt_token", authResponse.getToken());
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(false); // Set to true in production (HTTPS)
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge((int) (authResponse.getExpiresIn() / 1000));
+        response.addCookie(jwtCookie);
+
+        // Set refresh token as HttpOnly cookie
+        Cookie refreshCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(false); // Set to true in production (HTTPS)
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(60 * 60 * 24); // 1 day
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok(ApiResponse.success("Login successful", authResponse));
     }
     
     @PostMapping("/refresh")

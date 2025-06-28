@@ -35,8 +35,8 @@
 
         <!-- Business Services -->
         <module>auth-service</module>
-        <!-- <module>user-service</module>
-        <module>clinic-service</module>
+        <module>user-service</module>
+        <!-- <module>clinic-service</module>
         <module>package-service</module>
         <module>reservation-service</module>
         <module>schedule-service</module>

@@ -32,3 +32,5 @@ api-gateway/target/
 service-registry/target/
 config-server/target/
 common-lib/target/
+user-service/target/
+auth-service/target/
