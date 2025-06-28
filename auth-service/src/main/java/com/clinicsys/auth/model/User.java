@@ -92,7 +92,7 @@ public class User implements UserDetails {
     
     @Override
     public boolean isEnabled() {
-        return isActive; // Allow unverified users to login during development
+        return isActive; // Allow unverified users to login during development, next add return isActive && isVerified
     }
     
     public enum Role {
