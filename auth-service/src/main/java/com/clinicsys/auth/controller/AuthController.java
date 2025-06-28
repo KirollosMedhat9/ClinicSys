@@ -17,7 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AuthController {
     
     private final AuthService authService;
@@ -43,6 +42,30 @@ public class AuthController {
         String refreshToken = authHeader.substring(7);
         AuthResponse response = authService.refreshToken(refreshToken);
         return ResponseEntity.ok(ApiResponse.success("Token refreshed successfully", response));
+    }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String authHeader) {
+        // In a stateless JWT setup, logout is typically handled client-side
+        // by removing the token. However, we can implement server-side logout
+        // by maintaining a blacklist of tokens or using Redis
+        return ResponseEntity.ok(ApiResponse.success("Logout successful"));
+    }
+    
+    @GetMapping("/validate")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> validateToken(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Invalid authorization header"));
+        }
+        
+        String token = authHeader.substring(7);
+        try {
+            // Validate the token and return user info
+            Map<String, Object> userInfo = authService.validateToken(token);
+            return ResponseEntity.ok(ApiResponse.success("Token is valid", userInfo));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Invalid token"));
+        }
     }
     
     @GetMapping("/health")

@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -85,6 +88,28 @@ public class AuthService {
         String newRefreshToken = jwtService.generateRefreshToken(user);
         
         return createAuthResponse(user, newToken, newRefreshToken);
+    }
+    
+    public Map<String, Object> validateToken(String token) {
+        String username = jwtService.extractUsername(token);
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UnauthorizedException("Invalid token"));
+        
+        if (!jwtService.isTokenValid(token, user)) {
+            throw new UnauthorizedException("Invalid token");
+        }
+        
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("id", user.getId());
+        userInfo.put("email", user.getEmail());
+        userInfo.put("firstName", user.getFirstName());
+        userInfo.put("lastName", user.getLastName());
+        userInfo.put("phoneNumber", user.getPhoneNumber());
+        userInfo.put("role", user.getRole().name());
+        userInfo.put("verified", user.isVerified());
+        userInfo.put("active", user.isActive());
+        
+        return userInfo;
     }
     
     private AuthResponse createAuthResponse(User user, String token, String refreshToken) {
